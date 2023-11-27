@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "labview-node"
+version = "0.1.0"
+description = "demeo env that makes it possible to have a direct interface to LabvVIEW"
+authors = ["Jelle De Boeck <JelleDeBoeck@telenet.be>"]
+readme = "README.md"
+packages = [{include = "labview_functions"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+zmq = "^0.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+matplotlib = "^3.8.0"
+numpy = "^1.20"
+apidoc = "^1.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
