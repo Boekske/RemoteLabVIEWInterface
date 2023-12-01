@@ -233,3 +233,5 @@ bin/doc/_static/js/html5shiv.min.js
 bin/doc/_static/js/theme.js
 bin/examples/example_helloworld.py
 bin/examples/example_performance.py
+bin/doc/labview_utils.html
+bin/doc/_sources/labview_utils.rst.txt
