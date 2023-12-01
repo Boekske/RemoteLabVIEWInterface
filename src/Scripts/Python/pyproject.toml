@@ -1,21 +1,22 @@
 [tool.poetry]
-name = "labview-node"
+name = "labview_functions"
 version = "0.1.0"
 description = "demeo env that makes it possible to have a direct interface to LabvVIEW"
 authors = ["Jelle De Boeck <JelleDeBoeck@telenet.be>"]
 readme = "README.md"
-packages = [{include = "labview_functions"}]
+#packages = [{include = "labview_functions"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 zmq = "^0.0.0"
 
-
 [tool.poetry.group.dev.dependencies]
 matplotlib = "^3.8.0"
 numpy = "^1.20"
-apidoc = "^1.4.0"
-
+sphinx = "^7"
+myst-parser = "^2.0.0"
+sphinx-rtd-theme = "^2.0.0"
+sphinx-tabs = "^3.4.4"
 
 [build-system]
 requires = ["poetry-core"]
