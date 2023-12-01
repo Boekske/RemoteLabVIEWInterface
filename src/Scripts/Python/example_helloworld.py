@@ -14,4 +14,6 @@ try:
     lvc.Console.Print("hello world")
 except lv.LabVIEWerror as error:
     print(error)
+
+print(lvc.Console.GetLines())
     

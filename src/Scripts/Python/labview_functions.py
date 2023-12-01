@@ -1,54 +1,10 @@
-import json
-import zmq
-
-class RemoteCall:
-    """Class for connecting and executing commands over ZeroMQ Using JSON
-    """
-    socket = 0
-
-    def connect(self,connection_string):
-        """ Make the initial connection to the client running in LabVIEW
-
-        Parameters
-        ----------
-        connection_string : String (Example "tcp://127.0.0.1:5555", "ConnectionType"://"IPAdress":"Port")
-        """
-
-        context = zmq.Context()
-        self.socket = context.socket(zmq.REQ)
-        self.socket.connect(connection_string)
-
-    def execute(self, class_name, method, par_in):
-        """ Execute the Method by serializing inputs sending it over, and deserializing the result
-        """
-        data_2_send = "{ \"Command\":\"Execute\" }\x17{\"ClassLabel\":\"%s\",\"Method\":\"%s\"}\x17%s" % (class_name, method, json.dumps({"In": par_in}))
-        self.socket.send_string (data_2_send)
-        message = self.socket.recv()
-        parts = message.split(chr(0x17).encode())
-        return json.loads(parts[1]), json.loads(parts[0])
-
-class LabVIEWerror(Exception):
-    """Base class for all LabVIEW errors
-
-    Attributes
-    ----------
-    code: error code for testing which error happend
-    source: source of the error
-    """
-    def __init__(self, *args: object) -> None:
-        self.code = self.args[0]
-        self.source = self.args[1]
-        super().__init__(*args)
-
-    def __str__(self) -> str:
-        return f"LabVIEW Error with code: {self.code} source: {self.source}"
-
+import labVIEW_utils as lv_utils
 class LabviewControl:
     """ Class for calling all labview function with connection embedded
     """
 
     def __init__(self,connection_string) -> None:
-        self._connection=RemoteCall()
+        self._connection=lv_utils.RemoteCall()
         self._connection.connect(connection_string)
         self.Console=Console(self._connection)
         self.PerformanceTest=PerformanceTest(self._connection)
@@ -75,7 +31,7 @@ class Console:
 
         err, par_out = self._connection.execute("Console", "Clear", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
 
     def GetLines (self):
         """Get all the lines currently on the console
@@ -94,7 +50,7 @@ class Console:
 
         err, par_out = self._connection.execute("Console", "GetLines", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
         return par_out["Lines"]
 
     def Print (self, Line):
@@ -115,7 +71,7 @@ class Console:
 
         err, par_out = self._connection.execute("Console", "Print", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
 
 class PerformanceTest:
     """Class for testing timing, data types and performance of sending data between LabVIEW and the calling language
@@ -142,7 +98,7 @@ class PerformanceTest:
 
         err, par_out = self._connection.execute("PerformanceTest", "SendArray", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
         return par_out["Out"]
 
     def SendComplexCluster (self, In):
@@ -164,7 +120,7 @@ class PerformanceTest:
 
         err, par_out = self._connection.execute("PerformanceTest", "SendComplexCluster", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
         return par_out["Out"]
 
     def SendDBL (self, In):
@@ -186,7 +142,7 @@ class PerformanceTest:
 
         err, par_out = self._connection.execute("PerformanceTest", "SendDBL", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
         return par_out["Out"]
 
     def SendVarious (self, Boolean_In, Array_in, Cluster_In):
@@ -214,6 +170,6 @@ class PerformanceTest:
 
         err, par_out = self._connection.execute("PerformanceTest", "SendVarious", par_in)
         if err["status"]:
-            raise LabVIEWerror(err["code"],err["source"])
+            raise lv_utils.LabVIEWerror(err["code"],err["source"])
         return par_out
 

@@ -31,7 +31,7 @@ rem create documentation
 echo. === generate documentation ===
 if %UPDATE_APIDOC% == true (
 	echo. update api doc 
-	poetry run sphinx-apidoc -o source\ ..\  "..\example_*" -f
+	poetry run sphinx-apidoc -o doc\source\ ..\  "..\example_*" -f
 	) 
 
 poetry run doc\make.bat html

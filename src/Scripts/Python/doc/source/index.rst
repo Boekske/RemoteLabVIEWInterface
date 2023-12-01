@@ -11,6 +11,7 @@ Welcome to LabVIEW module's documentation!
    :caption: Contents:
    
    labview_functions.rst
+   labVIEW_utils.rst
 
 
 Indices and tables
